@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS Reserva (
+    id BIGSERIAL PRIMARY KEY,
+    nome_paciente VARCHAR(255) NOT NULL,
+    nome_medico VARCHAR(255) NOT NULL,
+    data_reserva TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
