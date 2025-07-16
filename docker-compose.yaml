@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  database:
+    image: postgres:16
+    container_name: universus-postgres
+#    restart: unless-stopped
+    environment:
+      POSTGRES_DB: universus-gerenciador-reserva
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+    ports:
+      - "8181:5432"
+    volumes:
+      - universus-postgres-data:/var/lib/postgresql/data
+    networks:
+      - universus-network
+
+  api:
+    image: evaldofires/universus-gerenciador-reserva:1.0
+    container_name: universus-gerenciador-reserva-api
+#    restart: unless-stopped
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/universus-gerenciador-reserva
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1111
+    ports:
+      - "8080:8080"
+    networks:
+      - universus-network
+
+volumes:
+  universus-postgres-data:
+
+networks:
+  universus-network:
+    driver: bridge
