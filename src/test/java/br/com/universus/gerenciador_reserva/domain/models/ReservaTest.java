@@ -2,14 +2,24 @@ package br.com.universus.gerenciador_reserva.domain.models;
 
 import br.com.universus.gerenciador_reserva.infra.exceptions.ReservaForaDoDiaException;
 import br.com.universus.gerenciador_reserva.infra.exceptions.ReservaForaDoHorarioException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static br.com.universus.gerenciador_reserva.utils.MedicoHelper.gerarMedico;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReservaTest {
+
+    private Medico medico;
+
+    @BeforeEach
+    void setup(){
+        medico = gerarMedico();
+    }
+
 
     @Test
     void deveCriarReservaComDataValida() {
@@ -17,11 +27,11 @@ class ReservaTest {
         LocalDateTime data = LocalDate.of(2025, 7, 21).atTime(16, 30); // Segunda-feira, horário válido
 
         // Act
-        Reserva reserva = new Reserva(1L, "João", "Dra. Ana", data);
+        Reserva reserva = new Reserva(1L, "João", medico, data);
 
         // Assert
         assertEquals("João", reserva.getNomePaciente());
-        assertEquals("Dra. Ana", reserva.getNomeMedico());
+        assertEquals(medico, reserva.getMedico());
         assertEquals(data, reserva.getDataReserva());
     }
 
@@ -32,7 +42,7 @@ class ReservaTest {
 
         ReservaForaDoDiaException ex = assertThrows(
                 ReservaForaDoDiaException.class,
-                () -> new Reserva(1L, "João", "Dra. Ana", sexta)
+                () -> new Reserva(1L, "João", medico, sexta)
         );
 
         assertEquals("As reservas só podem ser feitas às segundas-feiras.", ex.getMessage());
@@ -44,7 +54,7 @@ class ReservaTest {
 
         ReservaForaDoHorarioException ex = assertThrows(
                 ReservaForaDoHorarioException.class,
-                () -> new Reserva(1L, "Maria", "Dr. Carlos", data)
+                () -> new Reserva(1L, "Maria", medico, data)
         );
 
         assertTrue(ex.getMessage().contains("Horário fora do intervalo permitido"));
@@ -56,7 +66,7 @@ class ReservaTest {
 
         ReservaForaDoHorarioException ex = assertThrows(
                 ReservaForaDoHorarioException.class,
-                () -> new Reserva(1L, "Maria", "Dr. Carlos", data)
+                () -> new Reserva(1L, "Maria", medico, data)
         );
 
         assertTrue(ex.getMessage().contains("Horário fora do intervalo permitido"));
@@ -68,7 +78,7 @@ class ReservaTest {
 
         ReservaForaDoHorarioException ex = assertThrows(
                 ReservaForaDoHorarioException.class,
-                () -> new Reserva(1L, "Pedro", "Dra. Luiza", data)
+                () -> new Reserva(1L, "Pedro", medico, data)
         );
 
         assertEquals("Horários válidos apenas de 30 em 30 minutos.", ex.getMessage());
@@ -80,7 +90,7 @@ class ReservaTest {
 
         assertThrows(
                 NullPointerException.class,
-                () -> new Reserva(1L, null, "Dr. Paulo", data)
+                () -> new Reserva(1L, null, medico, data)
         );
     }
 
@@ -98,7 +108,7 @@ class ReservaTest {
     void deveLancarExcecaoSeDataForNull() {
         assertThrows(
                 NullPointerException.class,
-                () -> new Reserva(1L, "Lucas", "Dr. Paulo", null)
+                () -> new Reserva(1L, "Lucas", medico, null)
         );
     }
 }

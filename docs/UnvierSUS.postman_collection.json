@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "eb11303b-0979-4691-885d-32ca0b6602ec",
+		"name": "UnvierSUS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24107059"
+	},
+	"item": [
+		{
+			"name": "Buscar Horarios Disponiveis",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nomeMedico\":\"João\",\r\n    \"dataInicial\":\"2025-07-15\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/reservas/proximas-datas-disponiveis?nomeMedico=João&dataInicial=2025-07-15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reservas",
+						"proximas-datas-disponiveis"
+					],
+					"query": [
+						{
+							"key": "nomeMedico",
+							"value": "João"
+						},
+						{
+							"key": "dataInicial",
+							"value": "2025-07-15"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Render - Buscar Horarios Disponiveis",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeMedico\":\"João\",\r\n    \"dataInicial\":\"2025-07-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://universus-gerenciador-reserva.onrender.com/reservas/proximas-datas-disponiveis?nomeMedico=João&dataInicial=2025-07-15",
+							"protocol": "https",
+							"host": [
+								"universus-gerenciador-reserva",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"reservas",
+								"proximas-datas-disponiveis"
+							],
+							"query": [
+								{
+									"key": "nomeMedico",
+									"value": "João"
+								},
+								{
+									"key": "dataInicial",
+									"value": "2025-07-15"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Fazer Uma Reserva",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nomePaciente\" : \"Antonio Peixoto\",\r\n    \"nomeMedico\"  : \"João\",\r\n    \"dataReserva\" : \"2025-07-28T17:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/reservas"
+			},
+			"response": [
+				{
+					"name": "Render - Fazer Uma Reserva",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomePaciente\" : \"Antonio Peixoto\",\r\n    \"nomeMedico\"  : \"João\",\r\n    \"dataReserva\" : \"2025-07-28T17:30:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://universus-gerenciador-reserva.onrender.com/reservas"
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	]
+}
