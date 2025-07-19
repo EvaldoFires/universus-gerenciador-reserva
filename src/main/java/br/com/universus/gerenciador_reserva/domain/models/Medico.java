@@ -38,7 +38,7 @@ public class Medico {
         String crmLimpo = crm.trim();
         if (!crmLimpo.matches("^\\d{5}-\\d/[A-Z]{2}$")) {
             throw new CRMForaDoPadraoException("CRM fora do padrão. " +
-                    "Formato esperado: XXXXXX/UF (e.g., 12345-6/SP)");
+                    "Formato esperado: XXXXX-X/UF (e.g., 12345-6/SP)");
         }
     }
 }

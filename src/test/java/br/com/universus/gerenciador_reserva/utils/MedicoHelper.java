@@ -7,7 +7,7 @@ import br.com.universus.gerenciador_reserva.infra.persistence.entities.MedicoEnt
 public class MedicoHelper {
 
     public static Medico gerarMedico(){
-        return new Medico("CRM-SP-123456",
+        return new Medico("12345-6/SP",
                 "Dr. João Pedro Silva");
     }
 

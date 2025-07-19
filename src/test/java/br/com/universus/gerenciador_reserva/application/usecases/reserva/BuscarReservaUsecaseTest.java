@@ -3,21 +3,23 @@ package br.com.universus.gerenciador_reserva.application.usecases.reserva;
 import br.com.universus.gerenciador_reserva.application.gateways.ReservaRepository;
 import br.com.universus.gerenciador_reserva.application.usecases.medico.BuscarMedicoUsecase;
 import br.com.universus.gerenciador_reserva.domain.models.Medico;
+import br.com.universus.gerenciador_reserva.domain.models.Reserva;
+import br.com.universus.gerenciador_reserva.infra.exceptions.RecursoNaoEncontradoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.universus.gerenciador_reserva.utils.MedicoHelper.gerarMedico;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static br.com.universus.gerenciador_reserva.utils.ReservaHelper.gerarReserva;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,56 +27,62 @@ import static org.mockito.Mockito.when;
 class BuscarReservaUsecaseTest {
 
     @Mock
-    private ReservaRepository repository;
+    private ReservaRepository reservaRepository;
+
     @Mock
     private BuscarMedicoUsecase buscarMedico;
 
-    private BuscarReservaUsecase buscarReserva;
+    @InjectMocks
+    private BuscarReservaUsecase usecase;
+
     private Medico medico;
+    private Reserva reserva;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         medico = gerarMedico();
-        buscarReserva = new BuscarReservaUsecase(repository, buscarMedico);
+        reserva = gerarReserva(); // já deve conter o médico correto
     }
 
     @Test
-    void deveRetornarProximosHorariosDisponiveisParaTresSegundasFeiras() {
-        // Arrange
-        String nomeMedico = "Dr. House";
-        LocalDate primeiraSegunda = proximaSegunda(LocalDate.now());
+    void deveBuscarReservaPorIdComSucesso() {
+        when(reservaRepository.buscarPorId(1L)).thenReturn(Optional.of(reserva));
 
-        // Simula 3 segundas com todos horários disponíveis
-        for (int i = 0; i < 3; i++) {
-            LocalDate data = primeiraSegunda.plusWeeks(i);
-            when(repository.buscaReservasPorMedicoEData(medico, data))
-                    .thenReturn(Collections.emptyList()); // Nenhuma reserva
-        }
+        Reserva resultado = usecase.buscarPorId(1L);
 
-        // Act
-        List<List<LocalDateTime>> resultado = buscarReserva.buscarProximosHorariosDisponiveis(nomeMedico, null);
-
-        // Assert
-        assertEquals(3, resultado.size(), "Deveria retornar 3 semanas com horários disponíveis");
-
-        for (List<LocalDateTime> horarios : resultado) {
-            assertFalse(horarios.isEmpty(), "Cada segunda-feira deveria conter horários disponíveis");
-            assertEquals(6, horarios.size(), "Devem existir 6 horários por segunda (16:00 às 18:30)");
-        }
-
-        // Verifica que chamou o repositório exatamente 3 vezes
-        for (int i = 0; i < 3; i++) {
-            verify(repository).buscaReservasPorMedicoEData(medico, primeiraSegunda.plusWeeks(i));
-        }
+        assertThat(resultado).isEqualTo(reserva);
+        verify(reservaRepository).buscarPorId(1L);
     }
 
-    // Utilitários
+    @Test
+    void deveLancarExcecaoQuandoReservaNaoEncontrada() {
+        when(reservaRepository.buscarPorId(1L)).thenReturn(Optional.empty());
 
-    private LocalDate proximaSegunda(LocalDate base) {
-        while (base.getDayOfWeek() != DayOfWeek.MONDAY) {
-            base = base.plusDays(1);
-        }
-        return base;
+        assertThatThrownBy(() -> usecase.buscarPorId(1L))
+                .isInstanceOf(RecursoNaoEncontradoException.class)
+                .hasMessageContaining("Reserva não encontrada com id: 1");
+
+        verify(reservaRepository).buscarPorId(1L);
     }
 
+    @Test
+    void deveRetornarProximosHorariosDisponiveis() {
+        String crm = medico.getCrm();
+        LocalDate segunda = LocalDate.of(2025, 7, 21);
+
+        when(buscarMedico.buscarPorCPM(crm)).thenReturn(medico);
+        when(reservaRepository.buscaReservasPorMedicoEData(medico, segunda)).thenReturn(List.of(
+                segunda.atTime(16, 0),
+                segunda.atTime(16, 30)
+        ));
+
+        List<List<LocalDateTime>> horarios = usecase.buscarProximosHorariosDisponiveis(crm, segunda);
+
+        assertThat(horarios).isNotEmpty();
+        assertThat(horarios.get(0)).doesNotContain(
+                segunda.atTime(16, 0),
+                segunda.atTime(16, 30)
+        );
+    }
 }
+

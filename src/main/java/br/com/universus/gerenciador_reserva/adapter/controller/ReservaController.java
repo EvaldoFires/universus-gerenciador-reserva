@@ -1,6 +1,7 @@
 package br.com.universus.gerenciador_reserva.adapter.controller;
 
 import br.com.universus.gerenciador_reserva.adapter.dto.reserva.ReservaDTO;
+import br.com.universus.gerenciador_reserva.adapter.dto.utils.HorariosDisponiveisPorDiaDTO;
 import br.com.universus.gerenciador_reserva.adapter.mapper.ReservaMapper;
 import br.com.universus.gerenciador_reserva.application.usecases.medico.BuscarMedicoUsecase;
 import br.com.universus.gerenciador_reserva.application.usecases.reserva.BuscarReservaUsecase;
@@ -30,12 +31,20 @@ public class ReservaController {
     private final ReservaMapper mapper;
 
     @GetMapping("/proximas-datas-disponiveis")
-    public ResponseEntity<List<List<LocalDateTime>>> buscarProximosHorariosDisponiveis(
+    public ResponseEntity<List<HorariosDisponiveisPorDiaDTO>> buscarProximosHorariosDisponiveis(
             @RequestParam String crmMedico,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial){
 
-        return ResponseEntity.ok(buscarReserva
-                .buscarProximosHorariosDisponiveis(crmMedico, dataInicial));
+
+        List<List<LocalDateTime>> horarios = buscarReserva.buscarProximosHorariosDisponiveis(crmMedico, dataInicial);
+
+        List<HorariosDisponiveisPorDiaDTO> resposta = horarios
+                .stream()
+                .map(lista -> new HorariosDisponiveisPorDiaDTO(lista.getFirst().toLocalDate(),
+                        lista.stream().map(LocalDateTime::toLocalTime).toList()))
+                .toList();
+
+        return ResponseEntity.ok(resposta);
     }
 
     @GetMapping("/{id}")

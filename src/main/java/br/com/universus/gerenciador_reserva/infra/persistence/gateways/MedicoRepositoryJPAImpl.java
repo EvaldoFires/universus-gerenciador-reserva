@@ -4,7 +4,6 @@ package br.com.universus.gerenciador_reserva.infra.persistence.gateways;
 import br.com.universus.gerenciador_reserva.adapter.mapper.MedicoMapper;
 import br.com.universus.gerenciador_reserva.application.gateways.MedicoRepository;
 import br.com.universus.gerenciador_reserva.domain.models.Medico;
-import br.com.universus.gerenciador_reserva.infra.exceptions.RecursoNaoEncontradoException;
 import br.com.universus.gerenciador_reserva.infra.persistence.entities.MedicoEntity;
 import br.com.universus.gerenciador_reserva.infra.persistence.repository.MedicoRepositoryJPA;
 

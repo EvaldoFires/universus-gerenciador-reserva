@@ -1,6 +1,5 @@
 package br.com.universus.gerenciador_reserva.infra.persistence.repository;
 
-import br.com.universus.gerenciador_reserva.domain.models.Medico;
 import br.com.universus.gerenciador_reserva.infra.persistence.entities.MedicoEntity;
 import br.com.universus.gerenciador_reserva.infra.persistence.entities.ReservaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
