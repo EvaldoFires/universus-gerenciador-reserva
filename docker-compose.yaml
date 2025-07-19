@@ -18,7 +18,7 @@ services:
       - universus-network
 
   api:
-    image: evaldofires/universus-gerenciador-reserva:2.0
+    image: evaldofires/universus-gerenciador-reserva:3.0
     container_name: universus-gerenciador-reserva-api
 #    restart: unless-stopped
     depends_on:

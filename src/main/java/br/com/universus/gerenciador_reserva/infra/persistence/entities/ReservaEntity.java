@@ -18,8 +18,10 @@ public class ReservaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nomePaciente;
-    private String nomeMedico;
-    private LocalDateTime dataReserva;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "crm_medico", referencedColumnName = "crm", nullable = false)
+    private MedicoEntity medico;
+    private LocalDateTime dataReserva;
 
 }

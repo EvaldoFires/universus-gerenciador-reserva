@@ -1,6 +1,10 @@
 package br.com.universus.gerenciador_reserva.application.usecases.reserva;
 
 import br.com.universus.gerenciador_reserva.application.gateways.ReservaRepository;
+import br.com.universus.gerenciador_reserva.application.usecases.medico.BuscarMedicoUsecase;
+import br.com.universus.gerenciador_reserva.domain.models.Medico;
+import br.com.universus.gerenciador_reserva.domain.models.Reserva;
+import br.com.universus.gerenciador_reserva.infra.exceptions.RecursoNaoEncontradoException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -10,13 +14,23 @@ import java.util.List;
 
 public class BuscarReservaUsecase {
 
-    private  final ReservaRepository repository;
+    private final ReservaRepository repository;
+    private final BuscarMedicoUsecase buscarMedico;
 
-    public BuscarReservaUsecase(ReservaRepository repository) {
+    public BuscarReservaUsecase(ReservaRepository repository, BuscarMedicoUsecase buscarMedico) {
         this.repository = repository;
+        this.buscarMedico = buscarMedico;
     }
 
-    public List<List<LocalDateTime>> buscarProximosHorariosDisponiveis(String nomeMedico, LocalDate dataInicial) {
+    public Reserva buscarPorId(Long id){
+        return repository.buscarPorId(id).orElseThrow(() -> new RecursoNaoEncontradoException(
+                "Reserva não encontrada com id: " + id
+        ));
+    }
+
+    public List<List<LocalDateTime>> buscarProximosHorariosDisponiveis(String crm, LocalDate dataInicial) {
+
+        Medico medico = buscarMedico.buscarPorCPM(crm);
 
         List<List<LocalDateTime>> proximasDatasEHorariosDisponiveis = new ArrayList<>();
 
@@ -26,7 +40,7 @@ public class BuscarReservaUsecase {
             if (data.getDayOfWeek() == DayOfWeek.MONDAY) {
 
                 List<LocalDateTime> horariosReservados = repository
-                        .buscaReservasPorMedicoEData(nomeMedico, data);
+                        .buscaReservasPorMedicoEData(medico, data);
 
                 List<LocalDateTime> horariosDoDia = gerarHorariosValidos(data);
 

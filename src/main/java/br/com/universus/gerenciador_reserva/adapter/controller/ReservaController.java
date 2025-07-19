@@ -1,9 +1,13 @@
 package br.com.universus.gerenciador_reserva.adapter.controller;
 
-import br.com.universus.gerenciador_reserva.adapter.dto.ReservaDTO;
+import br.com.universus.gerenciador_reserva.adapter.dto.reserva.ReservaDTO;
+import br.com.universus.gerenciador_reserva.adapter.dto.utils.HorariosDisponiveisPorDiaDTO;
 import br.com.universus.gerenciador_reserva.adapter.mapper.ReservaMapper;
+import br.com.universus.gerenciador_reserva.application.usecases.medico.BuscarMedicoUsecase;
 import br.com.universus.gerenciador_reserva.application.usecases.reserva.BuscarReservaUsecase;
 import br.com.universus.gerenciador_reserva.application.usecases.reserva.CriarReservaUsecase;
+import br.com.universus.gerenciador_reserva.application.usecases.reserva.DeletarReservaUsecase;
+import br.com.universus.gerenciador_reserva.domain.models.Medico;
 import br.com.universus.gerenciador_reserva.domain.models.Reserva;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,23 +26,46 @@ public class ReservaController {
 
     private final BuscarReservaUsecase buscarReserva;
     private final CriarReservaUsecase criarReserva;
+    private final DeletarReservaUsecase deletarReserva;
+    private final BuscarMedicoUsecase buscarMedico;
     private final ReservaMapper mapper;
 
     @GetMapping("/proximas-datas-disponiveis")
-    public ResponseEntity<List<List<LocalDateTime>>> buscarProximosHorariosDisponiveis(
-            @RequestParam String nomeMedico,
+    public ResponseEntity<List<HorariosDisponiveisPorDiaDTO>> buscarProximosHorariosDisponiveis(
+            @RequestParam String crmMedico,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial){
 
-        return ResponseEntity.ok(buscarReserva
-                .buscarProximosHorariosDisponiveis(nomeMedico, dataInicial));
+
+        List<List<LocalDateTime>> horarios = buscarReserva.buscarProximosHorariosDisponiveis(crmMedico, dataInicial);
+
+        List<HorariosDisponiveisPorDiaDTO> resposta = horarios
+                .stream()
+                .map(lista -> new HorariosDisponiveisPorDiaDTO(lista.getFirst().toLocalDate(),
+                        lista.stream().map(LocalDateTime::toLocalTime).toList()))
+                .toList();
+
+        return ResponseEntity.ok(resposta);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservaDTO> buscarPorId(@PathVariable Long id){
+        ReservaDTO reservaDTO = mapper.toDTO(buscarReserva.buscarPorId(id));
+        return ResponseEntity.ok(reservaDTO);
     }
 
     @PostMapping
     public ResponseEntity<ReservaDTO> criarReserva (@RequestBody ReservaDTO reservaDTO){
-        Reserva reserva = mapper.toDomain(reservaDTO);
+        Medico medico = buscarMedico.buscarPorCPM(reservaDTO.crmMedico());
+        Reserva reserva = mapper.toDomain(reservaDTO, medico);
         reserva = criarReserva.cadastrarReserva(reserva);
         ReservaDTO reservaCadastrado = mapper.toDTO(reserva);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaCadastrado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id){
+        deletarReserva.deletarPorId(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     
 }
