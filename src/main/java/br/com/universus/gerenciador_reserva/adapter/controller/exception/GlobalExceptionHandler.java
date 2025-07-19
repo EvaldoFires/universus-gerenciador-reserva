@@ -1,8 +1,6 @@
 package br.com.universus.gerenciador_reserva.adapter.controller.exception;
 
-import br.com.universus.gerenciador_reserva.infra.exceptions.ReservaForaDoDiaException;
-import br.com.universus.gerenciador_reserva.infra.exceptions.ReservaForaDoHorarioException;
-import br.com.universus.gerenciador_reserva.infra.exceptions.ReservaIndisponivelException;
+import br.com.universus.gerenciador_reserva.infra.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,5 +35,21 @@ public class GlobalExceptionHandler {
         errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("mensagem", exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    }
+
+    @ExceptionHandler(CRMForaDoPadraoException.class)
+    public ResponseEntity<Map<String,Object>> cRMForaDoPadraoExceptionHandler (CRMForaDoPadraoException exception){
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("mensagem", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<Map<String,Object>> recursoNaoEncontradoExceptionHandler (RecursoNaoEncontradoException exception){
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("mensagem", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
     }
 }

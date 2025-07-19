@@ -1,5 +1,6 @@
 package br.com.universus.gerenciador_reserva.application.gateways;
 
+import br.com.universus.gerenciador_reserva.domain.models.Medico;
 import br.com.universus.gerenciador_reserva.domain.models.Reserva;
 
 import java.time.LocalDate;
@@ -12,8 +13,12 @@ public interface ReservaRepository {
 
     Reserva cadastrarReserva(Reserva reserva);
 
-    List<LocalDateTime> buscaReservasPorMedicoEData(String nomeMedico, LocalDate dataReserva);
+    Optional<Reserva> buscarPorId(Long id);
 
-    Optional<Reserva> buscarReservaExistente(String nomeMedico, LocalDateTime dataReserva);
+    List<LocalDateTime> buscaReservasPorMedicoEData(Medico medico, LocalDate dataReserva);
+
+    Optional<Reserva> buscarReservaExistente(Medico medico, LocalDateTime dataReserva);
+
+    void deletarPorId(Long id);
 
 }

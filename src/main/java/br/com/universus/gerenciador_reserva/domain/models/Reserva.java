@@ -12,14 +12,14 @@ public class Reserva {
 
     private Long id;
     private String nomePaciente;
-    private String nomeMedico;
+    private Medico medico;
     private LocalDateTime dataReserva;
 
-    public Reserva(Long id, String nomePaciente, String nomeMedico, LocalDateTime dataReserva) {
+    public Reserva(Long id, String nomePaciente, Medico medico, LocalDateTime dataReserva) {
         validarHorario(dataReserva);
         this.id = id;
         this.nomePaciente = Objects.requireNonNull(nomePaciente);
-        this.nomeMedico = Objects.requireNonNull(nomeMedico);
+        this.medico = Objects.requireNonNull(medico);
         this.dataReserva = Objects.requireNonNull(dataReserva);
     }
 
@@ -43,6 +43,6 @@ public class Reserva {
     // Getters
     public Long getId() { return id; }
     public String getNomePaciente() { return nomePaciente; }
-    public String getNomeMedico() { return nomeMedico; }
+    public Medico getMedico() { return medico; }
     public LocalDateTime getDataReserva() { return dataReserva; }
 }
