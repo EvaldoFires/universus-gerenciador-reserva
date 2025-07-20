@@ -53,6 +53,13 @@ public class ReservaController {
         return ResponseEntity.ok(reservaDTO);
     }
 
+    @GetMapping("/reserva")
+    public ResponseEntity<ReservaDTO> buscarPorCRMEData(@RequestParam String crm,
+                                                        @RequestParam LocalDateTime data){
+        ReservaDTO reservaDTO = mapper.toDTO(buscarReserva.buscarPorCRMEData(crm, data));
+        return ResponseEntity.ok(reservaDTO);
+    }
+
     @PostMapping
     public ResponseEntity<ReservaDTO> criarReserva (@RequestBody ReservaDTO reservaDTO){
         Medico medico = buscarMedico.buscarPorCPM(reservaDTO.crmMedico());

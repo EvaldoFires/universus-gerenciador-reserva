@@ -28,6 +28,13 @@ public class BuscarReservaUsecase {
         ));
     }
 
+    public Reserva buscarPorCRMEData(String crm, LocalDateTime dataReserva){
+        Medico medico = buscarMedico.buscarPorCPM(crm);
+        return repository.buscarReservaExistente(medico, dataReserva).orElseThrow(() -> new RecursoNaoEncontradoException(
+                "Reserva não encontrada para medico de CRM: " + crm + " e data:" + dataReserva
+        ));
+    }
+
     public List<List<LocalDateTime>> buscarProximosHorariosDisponiveis(String crm, LocalDate dataInicial) {
 
         Medico medico = buscarMedico.buscarPorCPM(crm);

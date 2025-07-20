@@ -84,7 +84,7 @@
 									"mode": "raw",
 									"raw": "{\r\n    \"nomePaciente\" : \"Antonio Peixoto\",\r\n    \"nomeMedico\"  : \"João\",\r\n    \"dataReserva\" : \"2025-07-28T17:30:00\"\r\n}"
 								},
-								"url": "http://localhost:8080/reservas/32"
+								"url": "http://localhost:8080/reservas/30"
 							},
 							"response": []
 						},
@@ -94,6 +94,43 @@
 								"method": "DELETE",
 								"header": [],
 								"url": "http://localhost:8080/reservas/32"
+							},
+							"response": []
+						},
+						{
+							"name": "Reserva - Buscar por CRM e Data",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nomePaciente\" : \"Antonio Peixoto\",\r\n    \"nomeMedico\"  : \"João\",\r\n    \"dataReserva\" : \"2025-07-28T17:30:00\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:8080/reservas/reserva?crm=65432-1/RJ&data=2025-08-11T16:00:00",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"reservas",
+										"reserva"
+									],
+									"query": [
+										{
+											"key": "crm",
+											"value": "65432-1/RJ"
+										},
+										{
+											"key": "data",
+											"value": "2025-08-11T16:00:00"
+										}
+									]
+								}
 							},
 							"response": []
 						}
@@ -281,6 +318,44 @@
 								"method": "DELETE",
 								"header": [],
 								"url": "https://universus-gerenciador-reserva.onrender.com/reservas/32"
+							},
+							"response": []
+						},
+						{
+							"name": "Reserva - Buscar por CRM e Data Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nomePaciente\" : \"Antonio Peixoto\",\r\n    \"nomeMedico\"  : \"João\",\r\n    \"dataReserva\" : \"2025-07-28T17:30:00\"\r\n}"
+								},
+								"url": {
+									"raw": "https://universus-gerenciador-reserva.onrender.com/reservas/reserva?crm=65432-1/RJ&data=2025-08-11T16:00:00",
+									"protocol": "https",
+									"host": [
+										"universus-gerenciador-reserva",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"reservas",
+										"reserva"
+									],
+									"query": [
+										{
+											"key": "crm",
+											"value": "65432-1/RJ"
+										},
+										{
+											"key": "data",
+											"value": "2025-08-11T16:00:00"
+										}
+									]
+								}
 							},
 							"response": []
 						}
