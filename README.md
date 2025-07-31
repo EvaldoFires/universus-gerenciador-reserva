@@ -72,3 +72,12 @@ http://localhost:8080
 ### 4. Postman
 
 dentro do repositorio do projeto existe uma past "docs" contendo o arquivo UniverSUS.postman.json que pode ser importado para dentro do postman para facilitar as chamadas dos endpoints da aplicação.
+
+### 5. Arquitetura Inicial - MVP
+
+![Arquitetura Inicial - MVP](docs/TechChallenge - Arquitetura Inicial.png )
+
+### 6. Evolução 
+
+![Evolução](docs/TechChallenge - Evolução.png)
+
