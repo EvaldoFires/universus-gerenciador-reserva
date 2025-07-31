@@ -81,3 +81,21 @@ dentro do repositorio do projeto existe uma past "docs" contendo o arquivo Unive
 
 ![Evolução](docs/UniverSUS-Evolução.png "Evolução do sistema")
 
+### 7. Não foi implementado
+
+### - Autenticação - 
+Preferimos seguir limitando à UBS, pois o futuro poderá ser integração com GOV.BR o que tomaria muito tempo
+
+
+### - Cluster Kubernets - 
+Decidimos seguir com infraestrutura mais simples possível com objetivo de apenas validar a hipótese e evitar custos desnecessários
+
+
+### - DynamoDB - 
+Só necessário a utilização quando tivermos a infra migrada para cloud e prevendo aumento de volume de dados e necessitando de alta disponibilidade.
+
+
+### - API - 
+Foi criado o necessário para viabilizar o MVP da unidade, mas os próximos passos são a separação em micro serviços e integração via API ou DB do SUS.
+
+
