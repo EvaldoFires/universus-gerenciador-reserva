@@ -75,9 +75,9 @@ dentro do repositorio do projeto existe uma past "docs" contendo o arquivo Unive
 
 ### 5. Arquitetura Inicial - MVP
 
-![Arquitetura Inicial - MVP](docs/TechChallenge - Arquitetura Inicial.png )
+![Arquitetura Inicial - MVP](docs/UniverSUS-Arquitetura-Inicial.png "Arquitetura Inicial" )
 
 ### 6. Evolução 
 
-![Evolução](docs/TechChallenge - Evolução.png)
+![Evolução](docs/UniverSUS-Evolução.png "Evolução do sistema")
 
